@@ -1,7 +1,7 @@
 package prodcons.v1;
 
 import java.util.Properties;
-
+// A rendre le 8 au matin
 public class ProdConsTest {
     public static void main(String[] args) throws Exception {
 
