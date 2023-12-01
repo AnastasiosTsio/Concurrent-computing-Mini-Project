@@ -1,4 +1,4 @@
-package prodcons.v1;
+package prodcons.v2;
 
 import java.util.Random;
 
@@ -44,14 +44,19 @@ public class Producteur extends Thread {
 
     }
 
-    public synchronized void produce(Message m) throws InterruptedException {
-        while (buffer.isFull()) {
-            buffer.wait();
+    public void produce(Message m) throws InterruptedException {
+        synchronized (buffer) {
+            buffer.mutex.acquire();
+            while (buffer.isFull()) {
+                buffer.mutex.release();
+                buffer.wait();
+                buffer.mutex.acquire();
+            }
+            buffer.put(m);
+            System.out.println("[" + buffer.readIndex + "/" + buffer.writeIndex + "] Producteur " + this.getId() + " a produit " + m);
+            buffer.mutex.release();
+            buffer.notifyAll();
         }
-        buffer.put(m);
-        System.out.println(
-                "[" + buffer.readIndex + "/" + buffer.writeIndex + "] Producteur " + this.getId() + " a produit " + m);
-        buffer.notifyAll();
     }
 
     public Message createMessage() {

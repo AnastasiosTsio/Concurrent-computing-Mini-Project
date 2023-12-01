@@ -1,4 +1,4 @@
-package prodcons.v1;
+package prodcons.v2;
 
 import java.util.Properties;
 import java.util.concurrent.Semaphore;
@@ -7,6 +7,7 @@ import prodcons.IProdConsBuffer;
 import prodcons.Message;
 
 public class ProdConsBuffer implements IProdConsBuffer {
+    public Semaphore mutex ;
     volatile Message msgBuffer[];
     int bufferSize;
     volatile int writeIndex = 0;
@@ -16,6 +17,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
     public ProdConsBuffer(int size) {
         bufferSize = size;
         msgBuffer = new Message[size];
+        mutex = new Semaphore(1);
     }
 
     @Override
