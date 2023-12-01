@@ -21,16 +21,37 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public void put(Message m) throws InterruptedException {
+    public void produce(Message m) throws InterruptedException {
         msgBuffer[writeIndex%bufferSize] = m;
         writeIndex++;
         totmsg++;
     }
 
     @Override
-    public Message get() throws InterruptedException {
+    public void produce(Message m, int authorIdForFeedBack) throws InterruptedException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'produce'");
+    }
+
+    @Override
+    public synchronized Message consume() throws InterruptedException {
+        while (this.isEmpty()) {
+            this.wait();
+        }
         Message m = msgBuffer[readIndex%bufferSize];
         readIndex++;
+        notifyAll();
+        return m;
+    }
+    @Override
+    public synchronized Message consume(int consumerIdForFeedBack) throws InterruptedException {
+        while (isEmpty()) {
+            wait();
+        }
+        Message m = msgBuffer[readIndex%bufferSize];
+        readIndex++;
+        System.out.println("[" + this.readIndex + "/" + this.writeIndex + "] Consomateur a consumé" + m);
+        notifyAll();
         return m;
     }
 

@@ -20,7 +20,7 @@ public class Consomateur extends Thread {
                 e.printStackTrace();
             }
             try {
-                consume();
+                buffer.consume(this.getId());
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -28,13 +28,4 @@ public class Consomateur extends Thread {
         }
     }
 
-    public synchronized void consume() throws InterruptedException {
-        while (buffer.isEmpty()) {
-            buffer.wait();
-        }
-
-        Message m = buffer.get();
-        System.out.println("[" + buffer.readIndex + "/" + buffer.writeIndex + "] Consomateur a consumé" + m);
-        buffer.notifyAll();
-    }
 }

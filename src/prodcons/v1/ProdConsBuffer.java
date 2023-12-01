@@ -19,16 +19,50 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public void put(Message m) throws InterruptedException {
-        msgBuffer[writeIndex%bufferSize] = m;
+    public synchronized void produce(Message m) throws InterruptedException {
+        while (isFull()) {
+            wait();
+        }
+        msgBuffer[writeIndex % bufferSize] = m;
         writeIndex++;
         totmsg++;
+
+        notifyAll();
     }
 
     @Override
-    public Message get() throws InterruptedException {
+    public synchronized void produce(Message m, long authorIdForFeedBack) throws InterruptedException {
+        while (isFull()) {
+            wait();
+        }
+        msgBuffer[writeIndex % bufferSize] = m;
+        writeIndex++;
+        totmsg++;
+        System.out.println("[" + this.readIndex + "/" + this.writeIndex + "] Producteur " + authorIdForFeedBack
+                + " a produit " + m);
+        notifyAll();
+    }
+
+    @Override
+    public synchronized Message consume() throws InterruptedException {
+        while (this.isEmpty()) {
+            this.wait();
+        }
         Message m = msgBuffer[readIndex%bufferSize];
         readIndex++;
+        notifyAll();
+        return m;
+    }
+    @Override
+    public synchronized Message consume(long consumerIdForFeedBack) throws InterruptedException {
+        while (isEmpty()) {
+            wait();
+        }
+        Message m = msgBuffer[readIndex%bufferSize];
+        readIndex++;
+        System.out.println("[" + this.readIndex + "/" + this.writeIndex + "] Consomateur " + consumerIdForFeedBack
+                + " a consumé " + m);
+        notifyAll();
         return m;
     }
 
