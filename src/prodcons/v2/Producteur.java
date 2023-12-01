@@ -34,7 +34,7 @@ public class Producteur extends Thread {
                 e.printStackTrace();
             }
             try {
-                produce(messages[currentMessage]);
+                buffer.produce(messages[currentMessage], this.getId());
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -42,21 +42,6 @@ public class Producteur extends Thread {
             currentMessage++;
         }
 
-    }
-
-    public void produce(Message m) throws InterruptedException {
-        synchronized (buffer) {
-            buffer.mutex.acquire();
-            while (buffer.isFull()) {
-                buffer.mutex.release();
-                buffer.wait();
-                buffer.mutex.acquire();
-            }
-            buffer.put(m);
-            System.out.println("[" + buffer.readIndex + "/" + buffer.writeIndex + "] Producteur " + this.getId() + " a produit " + m);
-            buffer.mutex.release();
-            buffer.notifyAll();
-        }
     }
 
     public Message createMessage() {

@@ -44,7 +44,6 @@ public class Producteur extends Thread {
 
     }
 
-
     public Message createMessage() {
         return new Message("Hello, World! I am" + this.getId() + "with currentMessage = " + currentMessage);
     }
