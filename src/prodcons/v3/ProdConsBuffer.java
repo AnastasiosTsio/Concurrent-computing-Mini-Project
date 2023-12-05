@@ -105,6 +105,21 @@ public class ProdConsBuffer implements IProdConsBuffer {
         return writeIndex == readIndex;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     @Override
     public void put(Message m, int n) throws InterruptedException {
         // TODO Auto-generated method stub
@@ -113,6 +128,18 @@ public class ProdConsBuffer implements IProdConsBuffer {
 
     @Override
     public Message[] consume(int k) throws InterruptedException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'consume'");
+    }
+
+    @Override
+    public void put(Message m, int n, long authorIdForFeedBack) throws InterruptedException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'put'");
+    }
+
+    @Override
+    public Message[] consume(int k, long consumerIdForFeedBack) throws InterruptedException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'consume'");
     }

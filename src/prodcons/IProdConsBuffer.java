@@ -17,6 +17,7 @@ public void produce(Message m, long authorIdForFeedBack) throws InterruptedExcep
 * the message have been consumed
 **/
 public void put(Message m, int n) throws InterruptedException;
+public void put(Message m, int n, long authorIdForFeedBack) throws InterruptedException;
 
 
 /**
@@ -31,6 +32,7 @@ public Message consume(long consumerIdForFeedBack) throws InterruptedException;
 * Retrieve n consecutive messages from the prodcons buffer
 **/
 public Message[] consume(int k) throws InterruptedException;
+public Message[] consume(int k, long consumerIdForFeedBack) throws InterruptedException;
 
 /**
 * Returns the number of messages currently available in
