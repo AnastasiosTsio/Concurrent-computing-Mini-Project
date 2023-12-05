@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 
 public class PerformanceTests {
     public static void main(String[] args) {
-        long[] times = new long[5];
+        long[] times = new long[6];
         // Loop through versions (v1, v2, v3, ...)
-        for (int i = 1; i<=5 ; i++) {
+        for (int i = 1; i<=6 ; i++) {
             String versionedClassName = "prodcons.v" + i + ".ProdConsTestV" + i;
             System.out.println("Trying to load " + versionedClassName);
             try {
