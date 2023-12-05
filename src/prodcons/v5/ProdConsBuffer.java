@@ -17,7 +17,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public synchronized void produce(Message m) throws InterruptedException {
+    public synchronized void put(Message m) throws InterruptedException {
         while (isFull()) {
             wait();
         }
@@ -42,13 +42,13 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public Message consume() throws InterruptedException {
-        return consume(1)[0];
+    public Message get() throws InterruptedException {
+        return get(1)[0];
     }
 
     @Override
-    public Message consume(long consumerIdForFeedBack) throws InterruptedException {
-        return consume(1, consumerIdForFeedBack)[0];
+    public Message get(long consumerIdForFeedBack) throws InterruptedException {
+        return get(1, consumerIdForFeedBack)[0];
     }
 
     @Override
@@ -70,7 +70,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public synchronized Message[] consume(int k) throws InterruptedException {
+    public synchronized Message[] get(int k) throws InterruptedException {
         while (isConsuming) {
             wait();
         }
@@ -94,7 +94,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public synchronized Message[] consume(int k, long consumerIdForFeedBack) throws InterruptedException {
+    public synchronized Message[] get(int k, long consumerIdForFeedBack) throws InterruptedException {
         while (isConsuming) {
             wait();
         }

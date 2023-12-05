@@ -19,7 +19,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public synchronized void produce(Message m) throws InterruptedException {
+    public synchronized void put(Message m) throws InterruptedException {
         while (isFull()) {
             wait();
         }
@@ -44,7 +44,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public synchronized Message consume() throws InterruptedException {
+    public synchronized Message get() throws InterruptedException {
         while (this.isEmpty()) {
             this.wait();
         }
@@ -54,7 +54,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
         return m;
     }
     @Override
-    public synchronized Message consume(long consumerIdForFeedBack) throws InterruptedException {
+    public synchronized Message get(long consumerIdForFeedBack) throws InterruptedException {
         while (isEmpty()) {
             wait();
         }
@@ -113,7 +113,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public Message[] consume(int k) throws InterruptedException {
+    public Message[] get(int k) throws InterruptedException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'consume'");
     }
@@ -125,7 +125,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public Message[] consume(int k, long consumerIdForFeedBack) throws InterruptedException {
+    public Message[] get(int k, long consumerIdForFeedBack) throws InterruptedException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'consume'");
     }

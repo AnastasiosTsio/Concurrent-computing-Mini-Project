@@ -2,16 +2,17 @@ package prodcons;
 
 
 public class Message{
-    String msg ;
+    Object msg ;
     Object creator;
-    public Message(String msg) {
+
+    public Message(Object msg) {
         this.msg = msg;
     }
-    public Message(String msg, Object sender) {
+    public Message(Object msg, Object sender) {
         this.msg = msg;
         this.creator = sender;
     }
-    public String getMsg() {
+    public Object getMsg() {
         return msg;
     }
     public Object getCreator() {

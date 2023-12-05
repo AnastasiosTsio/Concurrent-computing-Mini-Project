@@ -22,7 +22,7 @@ public class Consomateur extends Thread {
                 // Choose a random number
                 int nb = (int) (Math.random() * 10);
                 // Consume nb messages
-                buffer.consume(nb,this.getId());
+                buffer.get(nb,this.getId());
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

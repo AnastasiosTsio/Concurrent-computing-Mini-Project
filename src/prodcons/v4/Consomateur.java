@@ -19,7 +19,7 @@ public class Consomateur extends Thread {
                 e.printStackTrace();
             }
             try {
-                buffer.consume(this.getId());
+                buffer.get(this.getId());
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
