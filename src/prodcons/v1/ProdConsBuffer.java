@@ -1,7 +1,5 @@
 package prodcons.v1;
 
-import java.util.Properties;
-import java.util.concurrent.Semaphore;
 
 import prodcons.IProdConsBuffer;
 import prodcons.Message;

@@ -1,6 +1,5 @@
 package prodcons;
 
-import prodcons.v1.Consomateur;
 
 public class Message{
     String msg ;

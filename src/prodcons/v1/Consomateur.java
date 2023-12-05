@@ -1,6 +1,5 @@
 package prodcons.v1;
 
-import prodcons.Message;
 
 public class Consomateur extends Thread {
     ProdConsBuffer buffer;

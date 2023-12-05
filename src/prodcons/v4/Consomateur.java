@@ -1,4 +1,4 @@
-package prodcons.v3;
+package prodcons.v4;
 
 
 public class Consomateur extends Thread {
