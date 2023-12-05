@@ -1,4 +1,4 @@
-package prodcons.v2;
+package prodcons.v3;
 
 import java.util.Properties;
 // A rendre le 8 au matin
