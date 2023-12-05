@@ -1,8 +1,10 @@
 package prodcons.v1;
 
 import java.util.Properties;
+
+
 // A rendre le 8 au matin
-public class ProdConsTestV1 {
+public class ProdConsTestV1{
     public static void main(String[] args) throws Exception {
 
         // Lecture des options

@@ -6,6 +6,6 @@
     <entry key="bufSz">1</entry>
     <entry key="prodTime">10</entry>
     <entry key="consTime">10</entry>
-    <entry key="minProd">5</entry>
-    <entry key="maxProd">500</entry>
+    <entry key="minProd">500</entry>
+    <entry key="maxProd">501</entry>
 </properties>
