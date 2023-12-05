@@ -1,79 +1,92 @@
 package prodcons.v3;
 
-import java.util.Properties;
 import java.util.concurrent.Semaphore;
 
 import prodcons.IProdConsBuffer;
 import prodcons.Message;
 
 public class ProdConsBuffer implements IProdConsBuffer {
-    volatile Message msgBuffer[];
+    Message msgBuffer[];
     int bufferSize;
-    volatile int writeIndex = 0;
-    volatile int readIndex = 0;
+    int writeIndex = 0;
+    int readIndex = 0;
     int totmsg = 0;
-    int producerCount ;
+    int producerCount;
+    Semaphore emptyness ;
+    Semaphore fullness ;
 
     public ProdConsBuffer(int size) {
         bufferSize = size;
         msgBuffer = new Message[size];
         producerCount = size;
+        emptyness = new Semaphore(0);
+        fullness = new Semaphore(size);
     }
 
     @Override
-    public synchronized void produce(Message m) throws InterruptedException {
-        while (isFull()) {
-            wait();
-        }
-        msgBuffer[writeIndex % bufferSize] = m;
-        writeIndex++;
-        totmsg++;
+    public void produce(Message m) throws InterruptedException {
 
-        notifyAll();
+        fullness.acquire();
+        
+        
+        synchronized (this) {
+            msgBuffer[writeIndex % bufferSize] = m;
+            writeIndex++;
+            totmsg++;
+        }
+
+        emptyness.release();
     }
 
     @Override
-    public synchronized void produce(Message m, long authorIdForFeedBack) throws InterruptedException {
-        while (isFull()) {
-            wait();
-        }
-        msgBuffer[writeIndex % bufferSize] = m;
-        writeIndex++;
-        totmsg++;
-        System.out.println("[" + this.readIndex + "/" + this.writeIndex + "] Producteur " + authorIdForFeedBack
+    public void produce(Message m, long authorIdForFeedBack) throws InterruptedException {
+
+        fullness.acquire();
+
+        synchronized (this) {
+            msgBuffer[writeIndex % bufferSize] = m;
+            writeIndex++;
+            totmsg++;
+            System.out.println("[" + this.readIndex + "/" + this.writeIndex + "] Producteur " + authorIdForFeedBack
                 + " a produit " + m);
-        notifyAll();
+        }
+        emptyness.release();
     }
 
     @Override
-    public synchronized Message consume() throws InterruptedException {
-        while (this.isEmpty()) {
-            this.wait();
+    public Message consume() throws InterruptedException {
+
+        emptyness.acquire();
+        
+        Message m;
+
+        synchronized (this) {
+            m = msgBuffer[readIndex%bufferSize];
+            readIndex++;
         }
-        Message m = msgBuffer[readIndex%bufferSize];
-        readIndex++;
-        notifyAll();
+        fullness.release();
+        
+
         return m;
     }
     @Override
-    public synchronized Message consume(long consumerIdForFeedBack) throws InterruptedException {
-        while (isEmpty()) {
-            wait();
+    public Message consume(long consumerIdForFeedBack) throws InterruptedException {
+
+        emptyness.acquire();
+        
+        Message m;
+        
+        synchronized (this) {
+            m = msgBuffer[readIndex%bufferSize];
+            readIndex++;
+            System.out.println("[" + this.readIndex + "/" + this.writeIndex + "] Consomateur " + consumerIdForFeedBack
+                    + " a consumé " + m);
         }
-        Message m = msgBuffer[readIndex%bufferSize];
-        readIndex++;
-        System.out.println("[" + this.readIndex + "/" + this.writeIndex + "] Consomateur " + consumerIdForFeedBack
-                + " a consumé " + m);
-        notifyAll();
+        fullness.release();
+        
         return m;
     }
 
-    public synchronized void quitProduction() {
-        producerCount--;
-        if (producerCount == 0) {
-            notifyAll();
-        }
-    }
 
     @Override
     public synchronized int nmsg() {

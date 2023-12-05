@@ -2,12 +2,12 @@ package prodcons.v3;
 
 import java.util.Properties;
 // A rendre le 8 au matin
-public class ProdConsTestV2 {
+public class ProdConsTestV3 {
     public static void main(String[] args) throws Exception {
 
         // Lecture des options
         Properties properties = new Properties();
-        properties.loadFromXML(ProdConsTestV2.class.getClassLoader().getResourceAsStream("options.xml"));
+        properties.loadFromXML(ProdConsTestV3.class.getClassLoader().getResourceAsStream("options.xml"));
         int bufSz = Integer.parseInt(properties.getProperty("bufSz"));
         int nProd = Integer.parseInt(properties.getProperty("nProd"));
         int nCons = Integer.parseInt(properties.getProperty("nCons"));
