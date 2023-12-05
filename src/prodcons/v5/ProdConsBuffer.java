@@ -1,6 +1,7 @@
-package prodcons.v3;
+package prodcons.v5;
 
-import java.util.concurrent.Semaphore;
+
+import java.util.concurrent.locks.*;
 
 import prodcons.IProdConsBuffer;
 import prodcons.Message;
@@ -12,78 +13,85 @@ public class ProdConsBuffer implements IProdConsBuffer {
     int readIndex = 0;
     int totmsg = 0;
     int producerCount;
-    Semaphore emptyness ;
-    Semaphore fullness ;
+    final Lock lock = new ReentrantLock();
+    final Condition notFull = lock.newCondition();
+    final Condition notEmpty = lock.newCondition();
 
     public ProdConsBuffer(int size) {
         bufferSize = size;
         msgBuffer = new Message[size];
         producerCount = size;
-        emptyness = new Semaphore(0);
-        fullness = new Semaphore(size);
     }
 
     @Override
     public void produce(Message m) throws InterruptedException {
 
-        fullness.acquire();
-        
-        
-        synchronized (this) {
+        lock.lock();
+        try {
+            while (isFull()) {
+                notFull.await();
+            }
             msgBuffer[writeIndex % bufferSize] = m;
             writeIndex++;
             totmsg++;
+            notEmpty.signal();
+        } finally {
+            lock.unlock();
         }
-
-        emptyness.release();
     }
 
     @Override
     public void produce(Message m, long authorIdForFeedBack) throws InterruptedException {
 
-        fullness.acquire();
-
-        synchronized (this) {
+        lock.lock();
+        try {
+            while (isFull()) {
+                notFull.await();
+            }
             msgBuffer[writeIndex % bufferSize] = m;
             writeIndex++;
             totmsg++;
             System.out.println("[" + this.readIndex + "/" + this.writeIndex + "] Producteur " + authorIdForFeedBack
-                + " a produit " + m);
+                    + " a produit " + m);
+            notEmpty.signal();
+        } finally {
+            lock.unlock();
         }
-        emptyness.release();
     }
 
     @Override
     public Message consume() throws InterruptedException {
 
-        emptyness.acquire();
-        
-        Message m;
-
-        synchronized (this) {
-            m = msgBuffer[readIndex%bufferSize];
+        lock.lock();
+        try {
+            while (isEmpty()) {
+                notEmpty.await();
+            }
+            Message m = msgBuffer[readIndex % bufferSize];
             readIndex++;
+            notFull.signal();
+            return m;
+        } finally {
+            lock.unlock();
         }
-        fullness.release();
-        
-
-        return m;
     }
     @Override
     public Message consume(long consumerIdForFeedBack) throws InterruptedException {
 
-        emptyness.acquire();
-        
-        Message m;
-        
-        synchronized (this) {
-            m = msgBuffer[readIndex%bufferSize];
+        lock.lock();
+        try {
+            while (isEmpty()) {
+                notEmpty.await();
+            }
+            Message m = msgBuffer[readIndex % bufferSize];
             readIndex++;
             System.out.println("[" + this.readIndex + "/" + this.writeIndex + "] Consomateur " + consumerIdForFeedBack
                     + " a consumé " + m);
+            notFull.signal();
+            return m;
+        } finally {
+            lock.unlock();
         }
-        fullness.release();
-        return m;
     }
 
 
