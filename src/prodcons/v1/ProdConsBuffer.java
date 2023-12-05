@@ -29,7 +29,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public synchronized void produce(Message m, long authorIdForFeedBack) throws InterruptedException {
+    public synchronized void put(Message m, long authorIdForFeedBack) throws InterruptedException {
         while (isFull()) {
             wait();
         }

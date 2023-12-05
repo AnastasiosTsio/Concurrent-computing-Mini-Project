@@ -29,7 +29,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public synchronized void produce(Message m, long authorIdForFeedBack) throws InterruptedException {
+    public synchronized void put(Message m, long authorIdForFeedBack) throws InterruptedException {
         while (isFull()) {
             wait();
         }
@@ -41,6 +41,18 @@ public class ProdConsBuffer implements IProdConsBuffer {
         notify();
     }
 
+        @Override
+    public void put(Message m, int n) throws InterruptedException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'put'");
+    }
+
+    @Override
+    public void put(Message m, int n, long authorIdForFeedBack) throws InterruptedException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'put'");
+    }
+
     @Override
     public Message get() throws InterruptedException {
         return get(1)[0];
@@ -49,24 +61,6 @@ public class ProdConsBuffer implements IProdConsBuffer {
     @Override
     public Message get(long consumerIdForFeedBack) throws InterruptedException {
         return get(1, consumerIdForFeedBack)[0];
-    }
-
-    @Override
-    public synchronized int nmsg() {
-        return writeIndex - readIndex;
-    }
-
-    @Override
-    public synchronized int totmsg() {
-        return totmsg;
-    }
-
-    public synchronized boolean isFull() {
-        return nmsg() >= bufferSize;
-    }
-
-    public synchronized boolean isEmpty() {
-        return writeIndex == readIndex;
     }
 
     @Override
@@ -124,15 +118,21 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public void put(Message m, int n) throws InterruptedException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'put'");
+    public synchronized int nmsg() {
+        return writeIndex - readIndex;
     }
 
     @Override
-    public void put(Message m, int n, long authorIdForFeedBack) throws InterruptedException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'put'");
+    public synchronized int totmsg() {
+        return totmsg;
+    }
+
+    public synchronized boolean isFull() {
+        return nmsg() >= bufferSize;
+    }
+
+    public synchronized boolean isEmpty() {
+        return writeIndex == readIndex;
     }
 
 }

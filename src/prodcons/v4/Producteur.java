@@ -34,7 +34,7 @@ public class Producteur extends Thread {
                 e.printStackTrace();
             }
             try {
-                buffer.produce(messages[currentMessage], this.getId());
+                buffer.put(messages[currentMessage], this.getId());
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

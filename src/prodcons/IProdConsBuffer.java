@@ -6,7 +6,7 @@ public interface IProdConsBuffer {
 **/
 
 public void put(Message m) throws InterruptedException;
-public void produce(Message m, long authorIdForFeedBack) throws InterruptedException;
+public void put(Message m, long authorIdForFeedBack) throws InterruptedException;
 
 
 /**

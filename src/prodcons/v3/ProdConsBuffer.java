@@ -39,7 +39,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
     }
 
     @Override
-    public void produce(Message m, long authorIdForFeedBack) throws InterruptedException {
+    public void put(Message m, long authorIdForFeedBack) throws InterruptedException {
 
         fullness.acquire();
 
