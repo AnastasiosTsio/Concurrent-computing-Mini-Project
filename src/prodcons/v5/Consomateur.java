@@ -19,7 +19,10 @@ public class Consomateur extends Thread {
                 e.printStackTrace();
             }
             try {
-                buffer.consume(2,this.getId());
+                // Choose a random number
+                int nb = (int) (Math.random() * 10);
+                // Consume nb messages
+                buffer.consume(nb,this.getId());
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

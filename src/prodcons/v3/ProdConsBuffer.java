@@ -19,8 +19,8 @@ public class ProdConsBuffer implements IProdConsBuffer {
         bufferSize = size;
         msgBuffer = new Message[size];
         producerCount = size;
-        emptyness = new Semaphore(0);
-        fullness = new Semaphore(size);
+        emptyness = new Semaphore(0, true);
+        fullness = new Semaphore(size, true);
     }
 
     @Override
