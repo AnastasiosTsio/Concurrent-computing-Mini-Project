@@ -1,10 +1,19 @@
 package prodcons.v3;
 
 import java.util.Properties;
+import prodcons.*;
+
 // A rendre le 8 au matin
 public class ProdConsTestV3 {
-    public static void main(String[] args) throws Exception {
+    static boolean debugMode;
 
+    public static void main(String[] args) throws Exception {
+        debugMode = true;
+        if (args.length != 0) {
+            if (args[0].equals("--muted")) {
+                debugMode = false;
+            }
+        }
         // Lecture des options
         Properties properties = new Properties();
         properties.loadFromXML(ProdConsTestV3.class.getClassLoader().getResourceAsStream("options.xml"));
@@ -20,26 +29,31 @@ public class ProdConsTestV3 {
         ProdConsBuffer buffer = new ProdConsBuffer(bufSz);
 
         // Initialisation des producteurs et des consommateurs
-        System.out.println("ProdConsTest: lancement de " + nProd + " producteurs et " + nCons + " consommateurs");
+        if (!debugMode)
+            System.out.println("ProdConsTest: lancement de " + nProd + " producteurs et " + nCons + " consommateurs");
+        
         Producteur[] prods = new Producteur[nProd];
         for (int i = 0; i < nProd; i++) {
-            prods[i] = new Producteur(minProd, maxProd, prodTime, buffer);
+            prods[i] = new Producteur(minProd, maxProd, prodTime, buffer, debugMode);
             prods[i].start();
         }
+        if (!debugMode)
+            System.out.println("ProdConsTest: lancement de " + nCons + " consommateurs");
 
-        System.out.println("ProdConsTest: lancement de " + nCons + " consommateurs");
         Consomateur[] cons = new Consomateur[nCons];
         for (int i = 0; i < nCons; i++) {
-            cons[i] = new Consomateur(consTime, buffer);
+            cons[i] = new Consomateur(consTime, buffer, debugMode);
             cons[i].start();
         }
 
         for (int i = 0; i < nProd; i++) 
             prods[i].join();
         
-        while (!buffer.isEmpty());
-
-        System.out.println("ProdConsTest: Tous les messages ont étés consommés. Fin du test.");
+        while (!buffer.isEmpty())
+            ;
+        
+        if (!debugMode)
+            System.out.println("ProdConsTest: Tous les messages ont étés consommés. Fin du test.");
 
     }
 }

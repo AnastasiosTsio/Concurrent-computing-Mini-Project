@@ -38,9 +38,6 @@ public class ProdConsBuffer implements IProdConsBuffer {
             msgBuffer[writeIndex % bufferSize] = m;
             writeIndex++;
             totmsg++;
-
-            System.out.println("[" + this.readIndex + "/" + this.writeIndex + "] Producteur " + " a produit " + m);
-            notifyAll();
         }
     }
 

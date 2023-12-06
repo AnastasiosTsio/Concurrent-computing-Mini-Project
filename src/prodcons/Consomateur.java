@@ -1,11 +1,13 @@
-package prodcons.v2;
+package prodcons;
+
 
 
 public class Consomateur extends Thread {
-    ProdConsBuffer buffer;
+    boolean debugMode;
+    IProdConsBuffer buffer;
     int consTime;
 
-    public Consomateur(int consTime, ProdConsBuffer buffer) {
+    public Consomateur(int consTime, IProdConsBuffer buffer, boolean debugMode) {
         this.buffer = buffer;
         this.consTime = consTime;
         this.setDaemon(true);
@@ -19,7 +21,13 @@ public class Consomateur extends Thread {
                 e.printStackTrace();
             }
             try {
-                buffer.get(this.getId());
+                // Choose a random number
+                int nb = (int) (Math.random() * 10);
+                // Consume nb messages
+                if (debugMode)
+                    buffer.get(nb, this.getId());
+                else
+                    buffer.get(nb);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

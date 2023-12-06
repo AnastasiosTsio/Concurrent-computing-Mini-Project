@@ -1,7 +1,6 @@
 package prodcons.v5;
 
-import prodcons.IProdConsBuffer;
-import prodcons.Message;
+import prodcons.*;
 
 public class ProdConsBuffer implements IProdConsBuffer {
     volatile Message msgBuffer[];
