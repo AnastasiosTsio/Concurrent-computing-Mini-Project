@@ -30,8 +30,8 @@ public class ProdConsTestV3 {
 
         // Initialisation des producteurs et des consommateurs
         if (!debugMode)
-            System.out.println("ProdConsTest: lancement de " + nProd + " producteurs et " + nCons + " consommateurs");
-        
+            System.out.println("ProdConsTest: lancement de " + nProd + " producteurs");
+
         Producteur[] prods = new Producteur[nProd];
         for (int i = 0; i < nProd; i++) {
             prods[i] = new Producteur(minProd, maxProd, prodTime, buffer, debugMode);
@@ -46,12 +46,12 @@ public class ProdConsTestV3 {
             cons[i].start();
         }
 
-        for (int i = 0; i < nProd; i++) 
+        for (int i = 0; i < nProd; i++)
             prods[i].join();
-        
+
         while (!buffer.isEmpty())
             ;
-        
+
         if (!debugMode)
             System.out.println("ProdConsTest: Tous les messages ont étés consommés. Fin du test.");
 

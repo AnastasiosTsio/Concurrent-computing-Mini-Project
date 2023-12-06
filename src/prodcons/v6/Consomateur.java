@@ -1,5 +1,6 @@
-package prodcons;
+package prodcons.v6;
 
+import prodcons.*;
 
 
 public class Consomateur extends Thread {
@@ -21,10 +22,12 @@ public class Consomateur extends Thread {
                 e.printStackTrace();
             }
             try {
+
+                int nb = (int) (Math.random() * 10);
                 if (debugMode)
-                    buffer.get(this.getId());
+                    buffer.get(nb, this.getId());
                 else
-                    buffer.get();
+                    buffer.get(nb);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

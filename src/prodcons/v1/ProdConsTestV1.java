@@ -30,7 +30,7 @@ public class ProdConsTestV1 {
 
         // Initialisation des producteurs et des consommateurs
         if (!debugMode)
-            System.out.println("ProdConsTest: lancement de " + nProd + " producteurs et " + nCons + " consommateurs");
+            System.out.println("ProdConsTest: lancement de " + nProd + " producteurs");
         
         Producteur[] prods = new Producteur[nProd];
         for (int i = 0; i < nProd; i++) {

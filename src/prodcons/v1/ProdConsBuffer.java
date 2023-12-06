@@ -106,7 +106,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
     @Override
     public Message[] get(int k) throws InterruptedException {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'consume'");
+        throw new UnsupportedOperationException("Unimplemented method 'get'");
     }
 
     @Override
@@ -118,7 +118,7 @@ public class ProdConsBuffer implements IProdConsBuffer {
     @Override
     public Message[] get(int k, long consumerIdForFeedBack) throws InterruptedException {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'consume'");
+        throw new UnsupportedOperationException("Unimplemented method 'get'");
     }
 
 }

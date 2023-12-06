@@ -21,7 +21,7 @@ public class PerformanceTests {
                 // Measure execution time
                 long startTime = System.currentTimeMillis();
                 // Invoke the main method without printing anything of the main method
-                mainMethod.invoke(null, new Object[] {args});
+                mainMethod.invoke(null, new Object[] { new String[] { "--muted" }});
                 long endTime = System.currentTimeMillis();
 
                 times[i - 1] = endTime - startTime;
