@@ -9,6 +9,7 @@ public class Consomateur extends Thread {
     int consTime;
 
     public Consomateur(int consTime, IProdConsBuffer buffer, boolean debugMode) {
+        this.debugMode = debugMode;
         this.buffer = buffer;
         this.consTime = consTime;
         this.setDaemon(true);

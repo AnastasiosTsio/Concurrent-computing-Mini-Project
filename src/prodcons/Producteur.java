@@ -13,6 +13,7 @@ public class Producteur extends Thread {
     int prodTime;
 
     public Producteur(int minProd, int maxProd, int prodTime, IProdConsBuffer buffer, boolean debugMode) {
+        this.debugMode = debugMode;
         Random rand = new Random();
         this.buffer = buffer;
         this.minProd = minProd;
