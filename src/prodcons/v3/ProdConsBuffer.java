@@ -12,8 +12,9 @@ public class ProdConsBuffer implements IProdConsBuffer {
     int readIndex = 0;
     int totmsg = 0;
     int producerCount;
-    Semaphore emptyness ;
-    Semaphore fullness ;
+    Semaphore emptyness;
+    Semaphore fullness;
+    Semaphore mutex;
 
     public ProdConsBuffer(int size) {
         bufferSize = size;
@@ -21,19 +22,19 @@ public class ProdConsBuffer implements IProdConsBuffer {
         producerCount = size;
         emptyness = new Semaphore(0, true);
         fullness = new Semaphore(size, true);
+        mutex = new Semaphore(1);
     }
 
     @Override
     public void put(Message m) throws InterruptedException {
 
         fullness.acquire();
-        
-        
-        synchronized (this) {
-            msgBuffer[writeIndex % bufferSize] = m;
-            writeIndex++;
-            totmsg++;
-        }
+
+        mutex.acquire();
+        msgBuffer[writeIndex % bufferSize] = m;
+        writeIndex++;
+        totmsg++;
+        mutex.release();
 
         emptyness.release();
     }
@@ -43,13 +44,13 @@ public class ProdConsBuffer implements IProdConsBuffer {
 
         fullness.acquire();
 
-        synchronized (this) {
+        mutex.acquire();
             msgBuffer[writeIndex % bufferSize] = m;
             writeIndex++;
             totmsg++;
             System.out.println("[" + this.readIndex + "/" + this.writeIndex + "] Producteur " + authorIdForFeedBack
-                + " a produit " + m);
-        }
+                    + " a produit " + m);
+        mutex.release();
         emptyness.release();
     }
 
@@ -57,35 +58,34 @@ public class ProdConsBuffer implements IProdConsBuffer {
     public Message get() throws InterruptedException {
 
         emptyness.acquire();
-        
+
         Message m;
 
-        synchronized (this) {
-            m = msgBuffer[readIndex%bufferSize];
+        mutex.acquire();
+            m = msgBuffer[readIndex % bufferSize];
             readIndex++;
-        }
+        mutex.release();
         fullness.release();
-        
 
         return m;
     }
+
     @Override
     public Message get(long consumerIdForFeedBack) throws InterruptedException {
 
         emptyness.acquire();
-        
+
         Message m;
-        
-        synchronized (this) {
-            m = msgBuffer[readIndex%bufferSize];
+
+        mutex.acquire();
+            m = msgBuffer[readIndex % bufferSize];
             readIndex++;
             System.out.println("[" + this.readIndex + "/" + this.writeIndex + "] Consomateur " + consumerIdForFeedBack
                     + " a consumé " + m);
-        }
+        mutex.release();
         fullness.release();
         return m;
     }
-
 
     @Override
     public synchronized int nmsg() {
@@ -105,21 +105,6 @@ public class ProdConsBuffer implements IProdConsBuffer {
         return writeIndex == readIndex;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
     @Override
     public void put(Message m, int n) throws InterruptedException {
         // TODO Auto-generated method stub
