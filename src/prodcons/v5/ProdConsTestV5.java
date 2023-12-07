@@ -1,6 +1,7 @@
 package prodcons.v5;
 
 import java.util.Properties;
+import prodcons.v5.Consomateur;
 import prodcons.*;
 
 // A rendre le 8 au matin

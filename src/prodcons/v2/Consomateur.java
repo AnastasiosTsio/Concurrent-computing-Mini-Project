@@ -1,7 +1,6 @@
-package prodcons.v6;
+package prodcons.v2;
 
-import prodcons.*;
-
+import prodcons.IProdConsBuffer;
 
 public class Consomateur extends Thread {
     boolean debugMode;
@@ -23,17 +22,10 @@ public class Consomateur extends Thread {
                 e.printStackTrace();
             }
             try {
-
-                int nb = (int) (Math.random() * 10);
-                Message[] messages;
                 if (debugMode)
-                    messages = buffer.get(nb, this.getId());
+                    buffer.get(this.getId()).consumeMessage();
                 else
-                    messages = buffer.get(nb);
-                for (Message m : messages) {
-                    m.consumeMessage();
-                }
-                
+                    buffer.get().consumeMessage();
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

@@ -1,6 +1,6 @@
-package prodcons;
+package prodcons.v4;
 
-
+import prodcons.IProdConsBuffer;
 
 public class Consomateur extends Thread {
     boolean debugMode;
@@ -23,9 +23,9 @@ public class Consomateur extends Thread {
             }
             try {
                 if (debugMode)
-                    buffer.get(this.getId());
+                    buffer.get(this.getId()).consumeMessage();
                 else
-                    buffer.get();
+                    buffer.get().consumeMessage();
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

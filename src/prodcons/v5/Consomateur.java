@@ -25,10 +25,14 @@ public class Consomateur extends Thread {
             try {
 
                 int nb = (int) (Math.random() * 10);
+                Message[] messages;
                 if (debugMode)
-                    buffer.get(nb, this.getId());
+                    messages = buffer.get(nb, this.getId());
                 else
-                    buffer.get(nb);
+                    messages = buffer.get(nb);
+                for (Message m : messages) {
+                    m.consumeMessage();
+                }
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

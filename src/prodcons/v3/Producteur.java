@@ -1,7 +1,8 @@
-package prodcons;
+package prodcons.v3;
 
 import java.util.Random;
 
+import prodcons.*;
 
 public class Producteur extends Thread {
     boolean debugMode;
@@ -11,6 +12,7 @@ public class Producteur extends Thread {
     int currentMessage = 0;
     IProdConsBuffer buffer;
     int prodTime;
+    int pendingMessage = 0;
 
     public Producteur(int minProd, int maxProd, int prodTime, IProdConsBuffer buffer, boolean debugMode) {
         this.debugMode = debugMode;
@@ -39,6 +41,7 @@ public class Producteur extends Thread {
                     buffer.put(messages[currentMessage], this.getId());
                 else
                     buffer.put(messages[currentMessage]);
+            
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -47,6 +50,11 @@ public class Producteur extends Thread {
         }
 
     }
+
+    public void onMessageConsumed(Message m) {
+        pendingMessage--;
+    }
+
 
     public Message createMessage() {
         return new Message("Hello, World! I am" + this.getId() + "with currentMessage = " + currentMessage);

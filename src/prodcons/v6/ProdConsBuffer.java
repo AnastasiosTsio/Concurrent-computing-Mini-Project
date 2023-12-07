@@ -34,10 +34,13 @@ public class ProdConsBuffer implements IProdConsBuffer {
             wait();
         }
         nmsgRemaining = n;
+
         for (int i = 0; i < n; i++) {
             msgBuffer[writeIndex % bufferSize] = m;
             writeIndex++;
             totmsg++;
+
+            notifyAll();
         }
     }
 

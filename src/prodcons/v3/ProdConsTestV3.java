@@ -2,6 +2,7 @@ package prodcons.v3;
 
 import java.util.Properties;
 import prodcons.*;
+import prodcons.v1.Consomateur;
 
 // A rendre le 8 au matin
 public class ProdConsTestV3 {
